@@ -188,7 +188,6 @@ public class Main {
     private static void printProgramInstructions() {
         System.out.println("Virtual Memory Page Replacement Simulator. ");
         System.out.println("Author: Borislav Sabotinov");
-        System.out.println("Parameters 1 - 4 are required, including quantum even if it is not used by the scheduler.");
         System.out.println("java -jar VirtualMemoryPageReplacement.jar <algorithm_type> <numFrames>");
         System.out.println("[algorithm_type] : value can be in the range (1,3) inclusive.");
         System.out.println("\t1 - First Come First Served (FCFS) ");
