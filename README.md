@@ -14,13 +14,14 @@ A batch (Windows) or shell (Linux) script may be used to obtain simulation resul
 &nbsp;&nbsp;&nbsp;`Java -jar "VirtualMemoryPageReplacement.jar" 2 %%A`    
 `)`    
 `move "test.csv" %temp%`
+Where %temp% will become C:\Users\<name>\AppData\Local\Temp
 
 #### On Linux: genData.bat
 `#!/bin/bash`    
-`rm sim.data`     
+`rm test.csv`     
 `for ((i = 1; i < 31; i++)); do`     
-&nbsp;&nbsp;&nbsp;`./sim 1 $i`    
-&nbsp;&nbsp;&nbsp;`cp sim.data /data/sim-1-$i.data`    
+&nbsp;&nbsp;&nbsp;`java -jar "VirtualMemoryPageReplacement.jar" 1 $i`    
+&nbsp;&nbsp;&nbsp;`cp test.csv /data/test-1-$i.data`    
 `done`
  
  As can be observed from the example scripts, to manually run the program, at    
