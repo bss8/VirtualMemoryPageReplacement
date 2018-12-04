@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class Main {
 
-    static ArrayList<Page> referenceStringList = new ArrayList<>(100);
-    static int numPageFaults = 0;
+    private static ArrayList<Page> referenceStringList = new ArrayList<>(100);
+    private static int numPageFaults = 0;
 
     public static void main(String[] args) {
 
@@ -19,35 +19,36 @@ public class Main {
             final int numFrames = Integer.parseInt(args[1]);
             Frames frames = new Frames(numFrames);
 
-            //populateTestList();
+            //Uncomment below function call to populate list with known test values
+            //Make sure to comment out the for-loop that follows
+            populateTestList();
 
-            for (int i = 0; i < 100; i++) {
-                referenceStringList.add(new Page(generateRandomNums()));
-            }
-
+            //Comment out this for loop if above call to populateTestList() is active
+//            for (int i = 0; i < 10000; i++) {
+//                referenceStringList.add(new Page(generateRandomNums()));
+//            }
 
             if(algorithm == 1) {
                 fifo(frames);
             } else if (algorithm == 2) {
                 lru(frames);
             } else if (algorithm == 3) {
-                optimal(frames);
+                optimal(frames, numFrames);
             } else {
                 System.out.println("Invalid algorithm value provided. Please input 1-3 for FIFO, LRU, or Optimal respectively.");
             }
 
             printStatistics(numFrames);
         }
-    }
+    } // end main
 
     /**
      * This method defines the First In First Out page replacement algorithm.
      * @param frames
      */
-    static void fifo(Frames frames) {
+    private static void fifo(Frames frames) {
 
         for (int i = 0; i < referenceStringList.size(); ++i) {
-
             boolean isInFrame = false;
             //set first element
             if (frames.frameList.isEmpty()) {
@@ -56,12 +57,9 @@ public class Main {
                 continue;
             }
 
-            //System.out.println("Curr page" + referenceStringList.get(i));
             for (int j = 0; j < frames.getSize(); j++) {
                 if (frames.frameList.get(j).getPageValue() == referenceStringList.get(i).getPageValue()) {
                     isInFrame = true;
-                    //System.out.println(frames.frameList.get(j));
-                    //System.out.println(true);
                 }
             }
 
@@ -81,21 +79,58 @@ public class Main {
             //System.out.println(frames.frameList.toString());
         } // end main for
 
-        //System.out.println(frames.frameList.toString());
-        //System.out.println("earliest " + frames.getIndexFirstArrival());
-        //System.out.println("3rd frame entered at time: " + frames.frameList.get(2).getEnteredAtTime());
-        //System.out.println(numPageFaults);
+        System.out.println(frames.frameList.toString());
     } // end fifo
 
     /**
      * This method defines the Least Recently Used page replacement algorithm.
      * @param frames
      */
-    static void lru(Frames frames) {
+    private static void lru(Frames frames) {
         int index = 0;
 
         for (int i = 0; i < referenceStringList.size(); ++i) {
+            boolean isInFrame = false;
+            //set first element
+            if (frames.frameList.isEmpty()) {
+                numPageFaults++;
+                frames.frameList.add(referenceStringList.get(i));
+                continue;
+            }
 
+            //System.out.println("Curr page" + referenceStringList.get(i));
+            for (int j = 0; j < frames.getSize(); j++) {
+                if (frames.frameList.get(j).getPageValue() == referenceStringList.get(i).getPageValue()) {
+                    isInFrame = true;
+                    index = j;
+                }
+            }
+
+            if (!isInFrame && frames.isThereEmptyFrame()) {
+                frames.frameList.add(referenceStringList.get(i));
+                referenceStringList.get(i).setEnteredAtTime(i);
+                numPageFaults++;
+            } else if (isInFrame && frames.isThereEmptyFrame()) {
+                // do nada
+                frames.frameList.get(index).setEnteredAtTime(i);
+            } else if (!isInFrame && !frames.isThereEmptyFrame()) {
+                numPageFaults++;
+                referenceStringList.get(i).setEnteredAtTime(i);
+                frames.frameList.set(frames.getIndexFirstArrival(), referenceStringList.get(i));
+            } else if (isInFrame && !frames.isThereEmptyFrame()) {
+                //update time entered because it was "recently used," which is needed by algorithm
+                frames.frameList.get(index).setEnteredAtTime(i);
+            }
+            //System.out.println(frames.frameList.toString());
+        } // end main for
+
+        System.out.println(frames.frameList.toString());
+    } // end lru
+
+    private static void optimal(Frames frames, int numFrames) {
+        int index = 0;
+
+        for (int i = 0; i < referenceStringList.size(); ++i) {
             boolean isInFrame = false;
             //set first element
             if (frames.frameList.isEmpty()) {
@@ -120,33 +155,64 @@ public class Main {
                 numPageFaults++;
             } else if (isInFrame && frames.isThereEmptyFrame()) {
                 // do nada
+                frames.frameList.get(index).setEnteredAtTime(i);
             } else if (!isInFrame && !frames.isThereEmptyFrame()) {
                 numPageFaults++;
                 referenceStringList.get(i).setEnteredAtTime(i);
-                frames.frameList.set(frames.getIndexFirstArrival(), referenceStringList.get(i));
+                frames.frameList.set(getIndexOfFarthestNeeded(numFrames, frames, i), referenceStringList.get(i));
+
+                for (int k = 0; k < numFrames; k++) {
+                    frames.frameList.get(k).setFirstFutureOccurrenceIndex(-1);
+                }
+
             } else if (isInFrame && !frames.isThereEmptyFrame()) {
                 //update time entered because it was "recently used," which is needed by algorithm
                 //referenceStringList.get(i).setEnteredAtTime(i);
                 frames.frameList.get(index).setEnteredAtTime(i);
-//                System.out.println(referenceStringList.get(i) + " entered at " + referenceStringList.get(i).getEnteredAtTime());
-//                System.out.println("first arrival " + frames.getIndexFirstArrival());
-//                System.out.println("1 arrived " + frames.frameList.get(0).getEnteredAtTime());
-//                System.out.println("2 arrived " + frames.frameList.get(1).getEnteredAtTime());
-//                System.out.println("3 arrived " + frames.frameList.get(2).getEnteredAtTime());
             }
             //System.out.println(frames.frameList.toString());
         } // end main for
 
-        //System.out.println(frames.frameList.toString());
-        //System.out.println("earliest " + frames.getIndexFirstArrival());
-        //System.out.println("3rd frame entered at time: " + frames.frameList.get(2).getEnteredAtTime());
-        //System.out.println(numPageFaults);
-    } // end lru
-
-    static void optimal(Frames frames) {
-
+        System.out.println(frames.frameList.toString());
     } // end optimal
 
+
+    private static int getIndexOfFarthestNeeded(int numFrames, Frames frames, int currIndex) {
+
+        for (int i = 0; i < numFrames; i++) {
+            //System.out.println("Frame: " + i);
+            try {
+                for (int j = currIndex + 1; j < 100; j++) {
+                    if (frames.frameList.get(i).getPageValue() == referenceStringList.get(j).getPageValue()) {
+                        frames.frameList.get(i).setFirstFutureOccurrenceIndex(j);
+                        break;
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                //
+            }
+        }
+
+        int latest = frames.frameList.get(0).getFirstFutureOccurrenceIndex();
+        int indexToReturn = 0;
+
+        if (frames.frameList.get(0).getFirstFutureOccurrenceIndex() == -1) {
+            return 0;
+        }
+
+        for (int i = 1; i < numFrames; i++) {
+            //System.out.println("frame first occurrence " + frames.frameList.get(i).getFirstFutureOccurrenceIndex());
+            if (frames.frameList.get(i).getFirstFutureOccurrenceIndex() == -1) {
+                return i;
+            }
+            else if(frames.frameList.get(i).getFirstFutureOccurrenceIndex() > latest) {
+                latest = frames.frameList.get(i).getFirstFutureOccurrenceIndex();
+                indexToReturn = i;
+            }
+        }
+
+        return indexToReturn;
+    }
 
     /**
      * This method populates the reference string with KNOWN values from Assignment 4, where we can compare the results
@@ -222,7 +288,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-}
+} // end class

@@ -1,12 +1,22 @@
 public class Page {
     private int pageValue;
     private int enteredAtTime = 0;
+    private int firstFutureOccurrenceIndex;
+
+    int getFirstFutureOccurrenceIndex() {
+        return firstFutureOccurrenceIndex;
+    }
+
+    void setFirstFutureOccurrenceIndex(int firstFutureOccurrenceIndex) {
+        this.firstFutureOccurrenceIndex = firstFutureOccurrenceIndex;
+    }
 
     Page(int pageValue) {
         this.pageValue = pageValue;
+        this.firstFutureOccurrenceIndex = -1;
     }
 
-    public int getPageValue() {
+    int getPageValue() {
         return pageValue;
     }
 
@@ -14,11 +24,11 @@ public class Page {
         this.pageValue = pageValue;
     }
 
-    public int getEnteredAtTime() {
+    int getEnteredAtTime() {
         return enteredAtTime;
     }
 
-    public void setEnteredAtTime(int enteredAtTime) {
+    void setEnteredAtTime(int enteredAtTime) {
         this.enteredAtTime = enteredAtTime;
     }
 
@@ -26,4 +36,4 @@ public class Page {
     public String toString() {
         return " " + pageValue;
     }
-}
+} // end class Page

@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Frames {
 
-    public ArrayList<Page> frameList;
+    ArrayList<Page> frameList;
     private int numFrames;
 
     Frames(int numFrames) {
@@ -37,4 +37,4 @@ public class Frames {
         return earliest;
     }
 
-}
+} // end class Frames
