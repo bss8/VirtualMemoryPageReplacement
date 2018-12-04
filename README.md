@@ -1,4 +1,4 @@
-# VirtualMemoryPageReplacement
+# Virtual Memory Page Replacement
 Simulates three virtual memory page replacement algorithms: FIFO, LRU, and Optimal
 
 ## 1. How To: Set up & Run
@@ -24,19 +24,18 @@ A batch (Windows) or shell (Linux) script may be used to obtain simulation resul
  
  As can be observed from the example scripts, to manually run the program, at    
  a command line terminal, invoke the following:
- `java -jar "DiscreteEventSimulation.jar`
+ `java -jar "VirtualMemoryPageReplacement.jar`
  
  Execute without parameters to see instructions and information on what parameters   
  the program accepts. Alternatively, you may also type 'Help' (capitalization does not matter)"
  `java -jar "DiscreteEventSimulation.jar `   
- or `java -jar "DiscreteEventSimulation.jar help`
+ or `java -jar "VirtualMemoryPageReplacement.jar help`
  
  The following will be displayed: 
          
  Virtual Memory Page Replacement Simulator.  
  Author: Borislav Sabotinov   
  `java -jar VirtualMemoryPageReplacement.jar <algorithm_type> <numFrames>`    
- Parameters 1 - 4 are required, including quantum even if it is not used by the scheduler.    
  #####[algorithm_type] : value can be in the range (1,3) inclusive.   
          1 - First Come First Served (FCFS)
          2 - Least Recently Used (LRU)

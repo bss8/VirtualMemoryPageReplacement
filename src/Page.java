@@ -1,6 +1,12 @@
+/**
+ * This class defines what constitutes a page and what variables it needs to maintain for use by the
+ * FIFO, LRU, and Optimal algorithms.
+ */
 public class Page {
     private int pageValue;
+    // used by LRU
     private int enteredAtTime = 0;
+    // used by the Optimal algorithm
     private int firstFutureOccurrenceIndex;
 
     int getFirstFutureOccurrenceIndex() {

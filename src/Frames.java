@@ -3,7 +3,8 @@ import java.util.ArrayList;
 
 /**
  * Frames - user sets value 1 to 30 inclusive.
- * Each frame holds a Page.
+ * Each frame holds a Page. Defines the frames list and provides helper functions
+ * for interacting with the frames and determining which page entered first (for FIFO algorithm)
  */
 public class Frames {
 

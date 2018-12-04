@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Main class drives the simulator for virtual memory page replacement.
+ * Contains main() method, receives command line arguments, calls the appropriate algorithm,
+ * displays user argument usage help, displays statistics.
+ */
 public class Main {
 
     private static ArrayList<Page> referenceStringList = new ArrayList<>(10000);
@@ -127,6 +132,12 @@ public class Main {
         System.out.println(frames.frameList.toString());
     } // end lru
 
+    /**
+     * This method defines the Optimal algorithm. It is a forward looking approach in that a priori
+     * knowledge of incoming page requests is known, which in practice it may not be.
+     * @param frames
+     * @param numFrames
+     */
     private static void optimal(Frames frames, int numFrames) {
         int index = 0;
 
@@ -175,6 +186,14 @@ public class Main {
     } // end optimal
 
 
+    /**
+     * Used by the optimal algorithm, it determines which page in the frames list is least urgently needed.
+     * It returns the index of the frame, which is selected as the "victim" to be replaced by the incoming page.
+     * @param numFrames
+     * @param frames
+     * @param currIndex
+     * @return
+     */
     private static int getIndexOfFarthestNeeded(int numFrames, Frames frames, int currIndex) {
 
         for (int i = 0; i < numFrames; i++) {
@@ -259,6 +278,10 @@ public class Main {
         System.out.println("[numFrames] : defines the number of available frames, range (1,30)");
     } // end printProgramInstructions
 
+    /**
+     * Print necessary statistics to a CSV file, which can then be used to generate graphs and charts as needed
+     * @param numFrames
+     */
     private static void printStatistics(int numFrames) {
         System.out.println("Number of frames available: " + numFrames);
         System.out.println("Number of page Faults: " + numPageFaults);
