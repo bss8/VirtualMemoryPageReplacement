@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Main {
 
-    private static ArrayList<Page> referenceStringList = new ArrayList<>(100);
+    private static ArrayList<Page> referenceStringList = new ArrayList<>(10000);
     private static int numPageFaults = 0;
 
     public static void main(String[] args) {
@@ -21,12 +21,12 @@ public class Main {
 
             //Uncomment below function call to populate list with known test values
             //Make sure to comment out the for-loop that follows
-            populateTestList();
+            //populateTestList();
 
             //Comment out this for loop if above call to populateTestList() is active
-//            for (int i = 0; i < 10000; i++) {
-//                referenceStringList.add(new Page(generateRandomNums()));
-//            }
+            for (int i = 0; i < 10000; i++) {
+                referenceStringList.add(new Page(generateRandomNums()));
+            }
 
             if(algorithm == 1) {
                 fifo(frames);
@@ -144,8 +144,6 @@ public class Main {
                 if (frames.frameList.get(j).getPageValue() == referenceStringList.get(i).getPageValue()) {
                     isInFrame = true;
                     index = j;
-                    //System.out.println(frames.frameList.get(j));
-                    //System.out.println(true);
                 }
             }
 
@@ -180,9 +178,8 @@ public class Main {
     private static int getIndexOfFarthestNeeded(int numFrames, Frames frames, int currIndex) {
 
         for (int i = 0; i < numFrames; i++) {
-            //System.out.println("Frame: " + i);
             try {
-                for (int j = currIndex + 1; j < 100; j++) {
+                for (int j = currIndex + 1; j < 10000; j++) {
                     if (frames.frameList.get(i).getPageValue() == referenceStringList.get(j).getPageValue()) {
                         frames.frameList.get(i).setFirstFutureOccurrenceIndex(j);
                         break;
